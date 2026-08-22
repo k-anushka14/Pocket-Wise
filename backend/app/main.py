@@ -5,7 +5,7 @@ from app.config import settings
 from app.database.session import Base, engine
 from app.routes import (
     users, income, transactions, budgets, dashboard,
-    goals, recurring_expenses, split_expenses,
+    goals, recurring_expenses, split_expenses, reports,
 )
 
 # Import models so SQLAlchemy's Base.metadata knows about them before
@@ -38,8 +38,10 @@ app.include_router(dashboard.router)
 app.include_router(goals.router)
 app.include_router(recurring_expenses.router)
 app.include_router(split_expenses.router)
+app.include_router(reports.router)
 
 
 @app.get("/health")
 def health_check():
     return {"status": "ok"}
+

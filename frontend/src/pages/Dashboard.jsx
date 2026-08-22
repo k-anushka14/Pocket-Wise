@@ -9,6 +9,9 @@ import DashboardCard from '../components/DashboardCard'
 import SpendingChart from '../components/SpendingChart'
 import CategoryChart from '../components/CategoryChart'
 import BudgetProgress from '../components/BudgetProgress'
+import InsightBanner from '../components/InsightBanner'
+import NeedsWantsBar from '../components/NeedsWantsBar'
+import HealthScoreCard from '../components/HealthScoreCard'
 import { formatCurrency, toLabel } from '../utils/constants'
 
 export default function Dashboard() {
@@ -46,6 +49,9 @@ export default function Dashboard() {
 
       {!loading && !error && data && (
         <div className="space-y-6">
+          {/* Smart insights / overspending alerts */}
+          <InsightBanner insights={data.insights} />
+
           {/* Top cards */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <DashboardCard label="Balance" value={data.remaining_balance} icon={Wallet} accent="slate" />
@@ -69,6 +75,24 @@ export default function Dashboard() {
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <SpendingChart data={data.monthly_spending} />
             <CategoryChart data={data.spending_by_category} />
+          </div>
+
+          {/* Needs vs Wants */}
+          <NeedsWantsBar needsVsWants={data.needs_vs_wants} />
+
+          {/* Financial Health Score + No-spend days */}
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <HealthScoreCard health={data.financial_health} />
+            </div>
+            <div className="rounded-2xl bg-white p-5 shadow-sm dark:bg-slate-900">
+              <h3 className="mb-2 text-sm font-semibold text-slate-900 dark:text-white">No-spend days</h3>
+              <p className="text-3xl font-bold text-slate-900 dark:text-white">🔥 {data.no_spend_days.count}</p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">this month so far</p>
+              <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                Longest streak: {data.no_spend_days.longest_streak} day{data.no_spend_days.longest_streak !== 1 ? 's' : ''}
+              </p>
+            </div>
           </div>
 
           {/* Budgets */}

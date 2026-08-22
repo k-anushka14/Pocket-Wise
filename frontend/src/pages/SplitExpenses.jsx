@@ -58,9 +58,14 @@ export default function SplitExpenses() {
   }
 
   function splitEvenly() {
+    // Participant rows represent everyone EXCEPT you -- the total bill is
+    // split across you + those rows, so the divisor is n + 1, not n.
+    // (This is what was wrong before: with 1 other person on the form,
+    // it divided by 1 and handed back the full amount instead of half.)
     const n = form.participants.length
     if (!form.total_amount || n === 0) return
-    const share = (Number(form.total_amount) / n).toFixed(2)
+    const totalPeople = n + 1
+    const share = (Number(form.total_amount) / totalPeople).toFixed(2)
     setForm((f) => ({
       ...f,
       participants: f.participants.map((p) => ({ ...p, amount_owed: share })),
@@ -219,9 +224,11 @@ export default function SplitExpenses() {
 
           <div>
             <div className="mb-1 flex items-center justify-between">
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">Participants</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300">
+                Participants (everyone except you)
+              </label>
               <button type="button" onClick={splitEvenly} className="text-xs text-blue-600 hover:underline dark:text-blue-400">
-                Split evenly
+                Split evenly ({form.participants.length + 1} people)
               </button>
             </div>
             <div className="space-y-2">

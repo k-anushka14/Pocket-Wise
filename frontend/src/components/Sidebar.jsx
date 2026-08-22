@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Receipt, Wallet, PiggyBank, Target, Repeat, Users } from 'lucide-react'
+import { LayoutDashboard, Receipt, Wallet, PiggyBank, Target, Repeat, Users, FileBarChart } from 'lucide-react'
 
 const links = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -9,6 +9,7 @@ const links = [
   { to: '/goals', label: 'Goals', icon: Target },
   { to: '/recurring', label: 'Recurring', icon: Repeat },
   { to: '/splits', label: 'Splits', icon: Users },
+  { to: '/reports', label: 'Reports', icon: FileBarChart },
 ]
 
 export default function Sidebar() {
