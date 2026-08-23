@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Receipt, Wallet, PiggyBank, Target, Repeat, Users, FileBarChart } from 'lucide-react'
+import { LayoutDashboard, Receipt, Wallet, PiggyBank, Target, Repeat, Users, FileBarChart, MessageSquare } from 'lucide-react'
 
 const links = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -10,6 +10,7 @@ const links = [
   { to: '/recurring', label: 'Recurring', icon: Repeat },
   { to: '/splits', label: 'Splits', icon: Users },
   { to: '/reports', label: 'Reports', icon: FileBarChart },
+  { to: '/assistant', label: 'AI Assistant', icon: MessageSquare },
 ]
 
 export default function Sidebar() {

@@ -12,6 +12,7 @@ import Goals from './pages/Goals'
 import RecurringExpenses from './pages/RecurringExpenses'
 import SplitExpenses from './pages/SplitExpenses'
 import Reports from './pages/Reports'
+import Assistant from './pages/Assistant'
 
 function Protected({ children }) {
   return <ProtectedRoute>{children}</ProtectedRoute>
@@ -33,6 +34,7 @@ export default function App() {
           <Route path="/recurring" element={<Protected><RecurringExpenses /></Protected>} />
           <Route path="/splits" element={<Protected><SplitExpenses /></Protected>} />
           <Route path="/reports" element={<Protected><Reports /></Protected>} />
+          <Route path="/assistant" element={<Protected><Assistant /></Protected>} />
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </BrowserRouter>

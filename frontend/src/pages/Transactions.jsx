@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Plus } from 'lucide-react'
+import { useEffect, useState, useCallback } from 'react'
+import { Plus, Sparkles } from 'lucide-react'
 import Layout from '../components/Layout'
 import Modal from '../components/Modal'
 import Toast from '../components/Toast'
@@ -13,6 +13,7 @@ import {
   updateTransaction,
   deleteTransaction,
 } from '../api/transactions'
+import { categorizeExpense } from '../api/ai'
 import { EXPENSE_CATEGORIES, PAYMENT_METHODS, EXPENSE_TYPES, toLabel } from '../utils/constants'
 
 const EMPTY_FORM = {
@@ -44,6 +45,28 @@ export default function Transactions() {
   const [editingId, setEditingId] = useState(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [saving, setSaving] = useState(false)
+  const [categorizing, setCategorizing] = useState(false)
+
+  // Auto-categorize using AI after the user pauses typing (debounced 800ms)
+  const tryAICategorize = useCallback(async (description) => {
+    if (!description || description.length < 8 || editingId) return
+    setCategorizing(true)
+    try {
+      const result = await categorizeExpense(description)
+      if (result.ai_available && result.confidence === 'high') {
+        setForm((f) => ({
+          ...f,
+          category: result.category,
+          type: result.type,
+          ...(result.amount && !f.amount ? { amount: result.amount } : {}),
+        }))
+      }
+    } catch {
+      // Silently ignore -- AI unavailability shouldn't break the form
+    } finally {
+      setCategorizing(false)
+    }
+  }, [editingId])
 
   async function load() {
     setLoading(true)
@@ -212,11 +235,20 @@ export default function Transactions() {
             />
           </div>
           <div>
-            <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">Description</label>
+            <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-300">
+              Description
+              {categorizing && <span className="ml-2 text-xs text-slate-400">✨ AI categorizing…</span>}
+            </label>
             <input
               value={form.description}
-              onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
+              onChange={(e) => {
+                const val = e.target.value
+                setForm((f) => ({ ...f, description: val }))
+                clearTimeout(window._catTimer)
+                window._catTimer = setTimeout(() => tryAICategorize(val), 800)
+              }}
               className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+              placeholder="e.g. Bought DBMS textbook for ₹650"
             />
           </div>
           <div className="grid grid-cols-2 gap-3">

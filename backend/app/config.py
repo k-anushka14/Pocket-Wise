@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -8,8 +8,23 @@ class Settings(BaseSettings):
     database_url: str
     frontend_origin: str = "http://localhost:5173"
 
-    class Config:
-        env_file = ".env"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore"
+    )
 
 
 settings = Settings()
+
+
+class AISettings(BaseSettings):
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-1.5-flash"
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore"
+    )
+
+
+ai_settings = AISettings()
