@@ -84,3 +84,25 @@ def get_transaction_dates(db: Session, user_id, range_start: date, range_end: da
         ).distinct()
     ).all()
     return {r[0] for r in rows}
+
+
+def get_daily_category_spend(db: Session, user_id, range_start: date, range_end: date) -> dict:
+    """
+    Per-day, per-category spend (NOT cumulative) -- used by the 7-day
+    budget-safe-streak achievement check.
+    Returns {date: {category: Decimal}}.
+    """
+    rows = db.execute(
+        select(Transaction.date, Transaction.category, func.sum(Transaction.amount))
+        .where(
+            Transaction.user_id == user_id,
+            Transaction.date >= range_start,
+            Transaction.date <= range_end,
+        )
+        .group_by(Transaction.date, Transaction.category)
+    ).all()
+
+    result: dict = {}
+    for d, category, amount in rows:
+        result.setdefault(d, {})[category] = amount
+    return result

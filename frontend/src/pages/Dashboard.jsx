@@ -12,6 +12,8 @@ import BudgetProgress from '../components/BudgetProgress'
 import InsightBanner from '../components/InsightBanner'
 import NeedsWantsBar from '../components/NeedsWantsBar'
 import HealthScoreCard from '../components/HealthScoreCard'
+import SpendingPredictionCard from '../components/SpendingPredictionCard'
+import AchievementsSummaryCard from '../components/AchievementsSummaryCard'
 import { formatCurrency, toLabel } from '../utils/constants'
 
 export default function Dashboard() {
@@ -94,6 +96,12 @@ export default function Dashboard() {
               </p>
             </div>
           </div>
+
+          {/* Spending Prediction */}
+          <SpendingPredictionCard />
+
+          {/* Achievements */}
+          <AchievementsSummaryCard />
 
           {/* Budgets */}
           <div className="rounded-2xl bg-white p-5 shadow-sm dark:bg-slate-900">
