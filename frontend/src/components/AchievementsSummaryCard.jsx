@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+  import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Trophy } from 'lucide-react'
 import { listAchievements } from '../api/achievements'
