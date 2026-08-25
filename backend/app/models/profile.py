@@ -6,7 +6,7 @@ needs, keyed by the same UUID Supabase Auth assigns to the user.
 """
 import uuid
 from sqlalchemy import Column, String, DateTime
-from sqlalchemy.dialects.postgresql import UUID
+from app.database.types import GUID
 from sqlalchemy.sql import func
 
 from app.database.session import Base
@@ -15,7 +15,7 @@ from app.database.session import Base
 class Profile(Base):
     __tablename__ = "profiles"
 
-    id = Column(UUID(as_uuid=True), primary_key=True)  # matches auth.users.id
+    id = Column(GUID(), primary_key=True)  # matches auth.users.id
     full_name = Column(String, nullable=True)
     college = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

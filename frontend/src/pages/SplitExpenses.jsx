@@ -8,6 +8,7 @@ import ErrorState from '../components/ErrorState'
 import LoadingState from '../components/LoadingState'
 import { listSplitExpenses, createSplitExpense, markParticipantPaid, deleteSplitExpense } from '../api/splits'
 import { formatCurrency } from '../utils/constants'
+import { calculateEvenSplit } from '../utils/split'
 
 const EMPTY_FORM = {
   description: '', total_amount: '', date: new Date().toISOString().slice(0, 10),
@@ -58,14 +59,11 @@ export default function SplitExpenses() {
   }
 
   function splitEvenly() {
-    // Participant rows represent everyone EXCEPT you -- the total bill is
-    // split across you + those rows, so the divisor is n + 1, not n.
-    // (This is what was wrong before: with 1 other person on the form,
-    // it divided by 1 and handed back the full amount instead of half.)
+    // Participant rows represent everyone EXCEPT you -- calculateEvenSplit
+    // divides by (participants + yourself). See utils/split.js for why.
     const n = form.participants.length
     if (!form.total_amount || n === 0) return
-    const totalPeople = n + 1
-    const share = (Number(form.total_amount) / totalPeople).toFixed(2)
+    const share = calculateEvenSplit(Number(form.total_amount), n)
     setForm((f) => ({
       ...f,
       participants: f.participants.map((p) => ({ ...p, amount_owed: share })),

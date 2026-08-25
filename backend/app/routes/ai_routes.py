@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 from sqlalchemy import select, func
 from decimal import Decimal
@@ -6,6 +6,7 @@ from datetime import date
 
 from app.database.session import get_db
 from app.auth.dependencies import get_current_user, CurrentUser
+from app.rate_limit import limiter
 from app.models.transaction import Transaction
 from app.models.savings_goal import SavingsGoal
 from app.schemas.ai import CategorizeRequest, CategorizeResponse, AssistantRequest, AssistantResponse
@@ -26,7 +27,9 @@ router = APIRouter(prefix="/ai", tags=["ai"])
 
 
 @router.post("/categorize-expense", response_model=CategorizeResponse)
+@limiter.limit("15/minute")
 def categorize(
+    request: Request,
     payload: CategorizeRequest,
     current_user: CurrentUser = Depends(get_current_user),
 ):
@@ -57,7 +60,9 @@ def categorize(
 
 
 @router.post("/assistant", response_model=AssistantResponse)
+@limiter.limit("15/minute")
 def assistant(
+    request: Request,
     payload: AssistantRequest,
     current_user: CurrentUser = Depends(get_current_user),
     db: Session = Depends(get_db),
@@ -127,7 +132,9 @@ def assistant(
 
 
 @router.post("/affordability-check", response_model=AffordabilityResponse)
+@limiter.limit("30/minute")
 def affordability_check(
+    request: Request,
     payload: AffordabilityRequest,
     current_user: CurrentUser = Depends(get_current_user),
     db: Session = Depends(get_db),

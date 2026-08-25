@@ -1,6 +1,6 @@
 import uuid
 from sqlalchemy import Column, String, Numeric, Date, DateTime, ForeignKey
-from sqlalchemy.dialects.postgresql import UUID
+from app.database.types import GUID
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 
@@ -10,8 +10,8 @@ from app.database.session import Base
 class SplitExpense(Base):
     __tablename__ = "split_expenses"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id = Column(UUID(as_uuid=True), nullable=False, index=True)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    user_id = Column(GUID(), nullable=False, index=True)
 
     description = Column(String, nullable=False)
     total_amount = Column(Numeric(10, 2), nullable=False)
@@ -27,8 +27,8 @@ class SplitExpense(Base):
 class SplitParticipant(Base):
     __tablename__ = "split_participants"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    split_expense_id = Column(UUID(as_uuid=True), ForeignKey("split_expenses.id", ondelete="CASCADE"), nullable=False)
+    id = Column(GUID(), primary_key=True, default=uuid.uuid4)
+    split_expense_id = Column(GUID(), ForeignKey("split_expenses.id", ondelete="CASCADE"), nullable=False)
 
     person_name = Column(String, nullable=False)
     amount_owed = Column(Numeric(10, 2), nullable=False)
