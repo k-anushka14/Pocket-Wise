@@ -43,7 +43,10 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[settings.frontend_origin],
+    # FRONTEND_ORIGIN can be a single URL or a comma-separated list (e.g.
+    # "http://localhost:5173,https://pocketwise.vercel.app") so both local
+    # dev and your deployed frontend can call the API simultaneously.
+    allow_origins=[o.strip() for o in settings.frontend_origin.split(",") if o.strip()],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

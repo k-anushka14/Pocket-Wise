@@ -1,26 +1,13 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Receipt, Wallet, PiggyBank, Target, Repeat, Users, FileBarChart, MessageSquare, HandCoins, Trophy } from 'lucide-react'
-
-const links = [
-  { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/transactions', label: 'Transactions', icon: Receipt },
-  { to: '/income', label: 'Income', icon: Wallet },
-  { to: '/budgets', label: 'Budgets', icon: PiggyBank },
-  { to: '/goals', label: 'Goals', icon: Target },
-  { to: '/recurring', label: 'Recurring', icon: Repeat },
-  { to: '/splits', label: 'Splits', icon: Users },
-  { to: '/reports', label: 'Reports', icon: FileBarChart },
-  { to: '/assistant', label: 'AI Assistant', icon: MessageSquare },
-  { to: '/afford', label: 'Can I Afford?', icon: HandCoins },
-  { to: '/achievements', label: 'Achievements', icon: Trophy },
-]
+import { NAV_LINKS } from '../utils/navLinks'
+import ThemeToggle from './ThemeToggle'
 
 export default function Sidebar() {
   return (
-    <aside className="hidden w-56 shrink-0 border-r border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:block">
+    <aside className="hidden w-56 shrink-0 flex-col border-r border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900 md:flex">
       <div className="mb-6 px-2 text-lg font-semibold text-slate-900 dark:text-white">PocketWise</div>
-      <nav className="space-y-1">
-        {links.map(({ to, label, icon: Icon }) => (
+      <nav className="flex-1 space-y-1 overflow-y-auto">
+        {NAV_LINKS.map(({ to, label, icon: Icon }) => (
           <NavLink
             key={to}
             to={to}
@@ -37,6 +24,9 @@ export default function Sidebar() {
           </NavLink>
         ))}
       </nav>
+      <div className="mt-2 border-t border-slate-100 pt-2 dark:border-slate-800">
+        <ThemeToggle />
+      </div>
     </aside>
   )
 }

@@ -3,7 +3,7 @@ import { Wallet, TrendingDown, PiggyBank, Target } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { getDashboard } from '../api/dashboard'
 import Layout from '../components/Layout'
-import LoadingState from '../components/LoadingState'
+import DashboardSkeleton from '../components/DashboardSkeleton'
 import ErrorState from '../components/ErrorState'
 import DashboardCard from '../components/DashboardCard'
 import SpendingChart from '../components/SpendingChart'
@@ -46,7 +46,7 @@ export default function Dashboard() {
         <p className="text-sm text-slate-500 dark:text-slate-400">Here's your financial overview, {firstName}.</p>
       </div>
 
-      {loading && <LoadingState label="Crunching your numbers…" />}
+      {loading && <DashboardSkeleton />}
       {!loading && error && <ErrorState message={error} onRetry={load} />}
 
       {!loading && !error && data && (
