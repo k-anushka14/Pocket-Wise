@@ -68,10 +68,6 @@ PocketWise is built specifically around that pattern.
 - Per-IP rate limiting, stricter on AI endpoints
 - Full Row Level Security on every Supabase table
 
-## Screenshots
-
-*(Add screenshots here once you have a deployed instance — dashboard, transactions, AI assistant, and achievements pages are the most visually representative.)*
-
 ## Architecture
 
 ```mermaid
